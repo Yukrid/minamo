@@ -19,6 +19,7 @@ namespace minamo{
         whole+=in;
         whole+=out;
         whole+=uniform;
+        whole+=func_dif;
         whole+=main_head;
         whole+=main;
         whole+=main_foot;

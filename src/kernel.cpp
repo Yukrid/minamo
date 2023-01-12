@@ -32,30 +32,44 @@ namespace minamo{
     //+    Member Function    +//
     //_ Constructor
     Kernel::Kernel (void) noexcept
-        : DrawCount      { }
-        , name_code      {kernel_name+"_"+std::to_string(kernel_count++)}
-        , nof_locations  {0}
+        : frag_out_name   {kernel_name+"_"+std::to_string(kernel_count++)}
+        , nof_locations   {0}
+        , vertex_shd      { }
+        , fragment_shd    { }
+        , program_id      {0}
+        , vertex_array_id {0}
+        , draw_count      { }
+        , texture_id      {GL_TEXTURE0}
     {
         vertex_shd.version  ="#version "+kernel_version+" core\r\n";
         vertex_shd.in       ="";
         vertex_shd.out      ="";
         vertex_shd.uniform  ="";
+        vertex_shd.func_dif ="";
         vertex_shd.main_head="void main(){";
         vertex_shd.main     ="";
         vertex_shd.main_foot="}";
 
         fragment_shd.version  ="#version "+kernel_version+" core\r\n";
         fragment_shd.in       ="";
-        fragment_shd.out      ="";
+        fragment_shd.out      =std::string("out vec4 ")+Kernel::frag_out_name+";";
         fragment_shd.uniform  ="";
+        fragment_shd.func_dif ="";
         fragment_shd.main_head="void main(){";
         fragment_shd.main     ="";
         fragment_shd.main_foot="}";
    
         program_id=glCreateProgram();
-        
         glGenVertexArrays(1,&vertex_array_id);
-        
+        glBindVertexArray(vertex_array_id);
+
+#ifdef MINAMO_CALLED_GL_FUNC_INFO
+        std::cout<<"[Kernel::Kernel]  glCreateProgram -> "<<program_id<<std::endl;
+        std::cout<<"[Kernel::Kernel]  glGenVertexArrays : "<<vertex_array_id<<std::endl;
+        std::cout<<"[Kernel::Kernel]  glBindVertexArray : "<<vertex_array_id<<std::endl;
+#endif
+
+
         return;
     }
 
@@ -63,9 +77,15 @@ namespace minamo{
     //_ Destructor
     Kernel::~Kernel (void) noexcept
     {
+        glBindVertexArray(0);
         glDeleteVertexArrays(1, &vertex_array_id);
-
         glDeleteProgram(program_id);
+
+#ifdef MINAMO_CALLED_GL_FUNC_INFO
+        std::cout<<"[Kernel::~Kernel]  glBindVertexArray : "<<0<<std::endl;
+        std::cout<<"[Kernel::~Kernel]  glDeleteVertexArrays : "<<vertex_array_id<<std::endl;
+        std::cout<<"[Kernel::~Kernel]  glDeleteProgram : "<<program_id<<std::endl;
+#endif
 
         return;
     }
@@ -89,7 +109,14 @@ namespace minamo{
             glGetShaderInfoLog(vertex_shd.id, info_log_length, nullptr, &error_message[0]);   
         }
         glAttachShader(program_id, vertex_shd.id);
-    
+
+#ifdef MINAMO_CALLED_GL_FUNC_INFO
+        std::cout<<"[Kernel::compile_vertex_shader]  glCreateShader : "<<GL_VERTEX_SHADER<<" -> "<<vertex_shd.id<<std::endl;
+        std::cout<<"[Kernel::compile_vertex_shader]  glShaderSource : "<<vertex_shd.id<<std::endl;
+        std::cout<<"[Kernel::compile_vertex_shader]  glCompileShader : "<<vertex_shd.id<<std::endl;
+        std::cout<<"[Kernel::compile_vertex_shader]  glAttachShader : "<<program_id<<' '<<vertex_shd.id<<std::endl;
+#endif
+
         return error_message; 
     }
 
@@ -110,8 +137,21 @@ namespace minamo{
             glGetShaderInfoLog(fragment_shd.id, info_log_length, nullptr, &error_message[0]);   
         }
         glAttachShader(program_id, fragment_shd.id);
-        
+ 
+#ifdef MINAMO_CALLED_GL_FUNC_INFO
+        std::cout<<"[Kernel::compile_fragment_shader]  glCreateShader : "<<GL_FRAGMENT_SHADER<<" -> "<<fragment_shd.id<<std::endl;
+        std::cout<<"[Kernel::compile_fragment_shader]  glShaderSource : "<<fragment_shd.id<<std::endl;
+        std::cout<<"[Kernel::compile_fragment_shader]  glCompileShader : "<<fragment_shd.id<<std::endl;
+        std::cout<<"[Kernel::compile_fragment_shader]  glAttachShader : "<<program_id<<' '<<fragment_shd.id<<std::endl;
+#endif
+       
         return error_message; 
+    }
+
+
+    auto Kernel::use_texture (void) noexcept -> GLint
+    {
+        return texture_id++;
     }
 
     
@@ -121,10 +161,19 @@ namespace minamo{
     {
         auto print =[](std::ostream& os_, const std::string& str_){
     
-            for(const char& c: str_){
-            
-                if(c==';') os_<<c<<std::endl;
-                else       os_<<c;
+            for(char c: str_){
+                
+                switch(c){
+                    case ';':
+                    case '{':
+                    case '}':
+                        os_<<c<<std::endl;
+                        break;
+
+                    default :
+                        os_<<c;
+                        break;
+                }
             }
         };
 
@@ -135,6 +184,8 @@ namespace minamo{
         print(os_, this->vertex_shd.out);
         os_<<std::endl;
         print(os_, this->vertex_shd.uniform);
+        os_<<std::endl;
+        print(os_, this->vertex_shd.func_dif);
         os_<<std::endl;
         print(os_, this->vertex_shd.main_head);
         os_<<std::endl;
@@ -151,10 +202,19 @@ namespace minamo{
     {
         auto print =[](std::ostream& os_, const std::string& str_){
     
-            for(const char& c: str_){
-            
-                if(c==';') os_<<c<<std::endl;
-                else       os_<<c;
+            for(char c: str_){
+                
+                switch(c){
+                    case ';':
+                    case '{':
+                    case '}':
+                        os_<<c<<std::endl;
+                        break;
+
+                    default :
+                        os_<<c;
+                        break;
+                }
             }
         };
 
@@ -165,6 +225,8 @@ namespace minamo{
         print(os_, this->fragment_shd.out);
         os_<<std::endl;
         print(os_, this->fragment_shd.uniform);
+        os_<<std::endl;
+        print(os_, this->fragment_shd.func_dif);
         os_<<std::endl;
         print(os_, this->fragment_shd.main_head);
         os_<<std::endl;

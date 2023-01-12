@@ -18,5 +18,6 @@ namespace minamo{
     template <uint16_t N> using uvecn = glm::vec<N, unsigned int, glm::defaultp>; 
 
     template <uint16_t N, uint16_t M> using matnxm = glm::mat<N, M, float, glm::defaultp>; 
+
 }
 #endif

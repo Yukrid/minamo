@@ -11,7 +11,7 @@ namespace minamo{
     //(    minamo::DrawCount    )//
     //+    Member Function    +//
     //_ Constant Function
-    void DrawCount::increment (void) const noexcept
+    void DrawCount::increment (void) noexcept
     {
         ++draw_count;
 
@@ -19,7 +19,7 @@ namespace minamo{
     }
 
 
-    auto DrawCount::calc_buf_type (const CountLog& cl_) const noexcept -> GLuint
+    auto DrawCount::calc_buf_type (const CountLog& cl_) noexcept -> GLuint
     {
         if(draw_count  -cl_.count[2]<2 and 
            cl_.count[2]-cl_.count[1]<2 and 

@@ -11,22 +11,17 @@ namespace minamo{
 
     //(    minamo::DrawCount    )//
     struct DrawCount{
-            
-        private :
+        
         //+    Member Variable     +//
-        mutable uint64_t draw_count =0;
-            
-            
+        uint64_t draw_count =0;    
+        
+
         //+    Member Function    +//
         //_ Destructive Function
-        void increment (void) const noexcept;
+        void increment (void) noexcept;
         
-        public :
         //_ Counstant Function
-        auto calc_buf_type (const CountLog&) const noexcept -> GLuint;
-
-        //+    Friend    +//
-        friend class Drawer;
+        auto calc_buf_type (const CountLog&) noexcept -> GLuint;
     };
 }
 #endif

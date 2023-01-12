@@ -22,6 +22,7 @@ namespace minamo{
                       std::string in;
                       std::string out;
                       std::string uniform;
+                      std::string func_dif;
                       std::string main_head;
                       std::string main;
                       std::string main_foot;

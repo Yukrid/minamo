@@ -11,16 +11,14 @@ namespace minamo{
     //-------------//
     //    Alias    //
     //-------------//
-    using index_t =size_t;
-
-
-    //------------------------//
-    //    Type Declaration    //
-    //------------------------//
-    struct Kernel;
-    struct Drawer;
-
-
+    using index_t       =size_t;
+    using dim_t         =uint_fast8_t;
+    using ProgramID     =GLuint;
+    using LocationID    =GLuint;
+    using VertexArrayID =GLuint;
+    using BufferID      =GLuint;
+    using UniformID     =GLint;
+    
     //-----------------------//
     //    Type Definition    //
     //-----------------------//
@@ -43,34 +41,34 @@ namespace minamo{
     //---------------------------//
     //    Function Definition    //
     //---------------------------//
-    template <uint16_t D> constexpr auto glsl_float    (void) -> const char* { return ""; }
-    template <>           constexpr auto glsl_float<1> (void) -> const char* { return "float"; }
-    template <>           constexpr auto glsl_float<2> (void) -> const char* { return "vec2"; }
-    template <>           constexpr auto glsl_float<3> (void) -> const char* { return "vec3"; }
-    template <>           constexpr auto glsl_float<4> (void) -> const char* { return "vec4"; }
+    template <dim_t D> constexpr auto glsl_float    (void) -> const char* { return ""; }
+    template <>        constexpr auto glsl_float<1> (void) -> const char* { return "float"; }
+    template <>        constexpr auto glsl_float<2> (void) -> const char* { return "vec2"; }
+    template <>        constexpr auto glsl_float<3> (void) -> const char* { return "vec3"; }
+    template <>        constexpr auto glsl_float<4> (void) -> const char* { return "vec4"; }
     
-    template <uint16_t D> constexpr auto glsl_uint     (void) -> const char* { return ""; }
-    template <>           constexpr auto glsl_uint<1>  (void) -> const char* { return "uint"; }
-    template <>           constexpr auto glsl_uint<2>  (void) -> const char* { return "uvec2"; }
-    template <>           constexpr auto glsl_uint<3>  (void) -> const char* { return "uvec3"; }
-    template <>           constexpr auto glsl_uint<4>  (void) -> const char* { return "uvec4"; }
+    template <dim_t D> constexpr auto glsl_uint     (void) -> const char* { return ""; }
+    template <>        constexpr auto glsl_uint<1>  (void) -> const char* { return "uint"; }
+    template <>        constexpr auto glsl_uint<2>  (void) -> const char* { return "uvec2"; }
+    template <>        constexpr auto glsl_uint<3>  (void) -> const char* { return "uvec3"; }
+    template <>        constexpr auto glsl_uint<4>  (void) -> const char* { return "uvec4"; }
     
-    template <uint16_t D> constexpr auto glsl_int      (void) -> const char* { return ""; }
-    template <>           constexpr auto glsl_int<1>   (void) -> const char* { return "int"; }
-    template <>           constexpr auto glsl_int<2>   (void) -> const char* { return "ivec2"; }
-    template <>           constexpr auto glsl_int<3>   (void) -> const char* { return "ivec3"; }
-    template <>           constexpr auto glsl_int<4>   (void) -> const char* { return "ivec4"; }
+    template <dim_t D> constexpr auto glsl_int      (void) -> const char* { return ""; }
+    template <>        constexpr auto glsl_int<1>   (void) -> const char* { return "int"; }
+    template <>        constexpr auto glsl_int<2>   (void) -> const char* { return "ivec2"; }
+    template <>        constexpr auto glsl_int<3>   (void) -> const char* { return "ivec3"; }
+    template <>        constexpr auto glsl_int<4>   (void) -> const char* { return "ivec4"; }
     
-    template <uint16_t D1, uint16_t D2> constexpr auto glsl_mat       (void) -> const char* { return ""; }
-    template <>                         constexpr auto glsl_mat<2, 2> (void) -> const char* { return "mat2"; }
-    template <>                         constexpr auto glsl_mat<2, 3> (void) -> const char* { return "mat2x3"; }
-    template <>                         constexpr auto glsl_mat<2, 4> (void) -> const char* { return "mat2x4"; }
-    template <>                         constexpr auto glsl_mat<3, 2> (void) -> const char* { return "mat3x2"; }
-    template <>                         constexpr auto glsl_mat<3, 3> (void) -> const char* { return "mat3"; }
-    template <>                         constexpr auto glsl_mat<3, 4> (void) -> const char* { return "mat3x4"; }
-    template <>                         constexpr auto glsl_mat<4, 2> (void) -> const char* { return "mat4x2"; }
-    template <>                         constexpr auto glsl_mat<4, 3> (void) -> const char* { return "mat4x3"; }
-    template <>                         constexpr auto glsl_mat<4, 4> (void) -> const char* { return "mat4"; }
+    template <dim_t D1, dim_t D2> constexpr auto glsl_mat       (void) -> const char* { return ""; }
+    template <>                   constexpr auto glsl_mat<2, 2> (void) -> const char* { return "mat2"; }
+    template <>                   constexpr auto glsl_mat<2, 3> (void) -> const char* { return "mat2x3"; }
+    template <>                   constexpr auto glsl_mat<2, 4> (void) -> const char* { return "mat2x4"; }
+    template <>                   constexpr auto glsl_mat<3, 2> (void) -> const char* { return "mat3x2"; }
+    template <>                   constexpr auto glsl_mat<3, 3> (void) -> const char* { return "mat3"; }
+    template <>                   constexpr auto glsl_mat<3, 4> (void) -> const char* { return "mat3x4"; }
+    template <>                   constexpr auto glsl_mat<4, 2> (void) -> const char* { return "mat4x2"; }
+    template <>                   constexpr auto glsl_mat<4, 3> (void) -> const char* { return "mat4x3"; }
+    template <>                   constexpr auto glsl_mat<4, 4> (void) -> const char* { return "mat4"; }
     
     template <TexEnum T> constexpr auto glsl_tex                   (void) -> const char* { return ""; }
     template <>          constexpr auto glsl_tex<s1D>              (void) -> const char* { return "sampler1D"; }
@@ -114,8 +112,7 @@ namespace minamo{
     template <>          constexpr auto glsl_tex<us2DMS>           (void) -> const char* { return "usampler2DMS"; }
     template <>          constexpr auto glsl_tex<us2DMSArray>      (void) -> const char* { return "usampler2DMSArray"; }
     
-    template <TexEnum T> constexpr auto tex_gl_uint                   (void) -> GLuint { return 0; }
-    
+    template <TexEnum T> constexpr auto tex_gl_uint                   (void) -> GLuint { return 0; } 
     template <>          constexpr auto tex_gl_uint<s1D>              (void) -> GLuint { return GL_TEXTURE_1D; }
     template <>          constexpr auto tex_gl_uint<s2D>              (void) -> GLuint { return GL_TEXTURE_2D; }
     template <>          constexpr auto tex_gl_uint<s3D>              (void) -> GLuint { return GL_TEXTURE_3D; }
