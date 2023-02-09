@@ -37,7 +37,6 @@ namespace minamo::system{
             bool  not_initialized = true;
             Func  draw            = nullptr;
             Func  jump            = nullptr;
-            Func  leave           = nullptr;
             Func  initialize      = nullptr;
             void* data            = nullptr;
         };
