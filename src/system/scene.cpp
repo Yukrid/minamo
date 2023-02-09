@@ -1,4 +1,5 @@
 #include "minamo/system/scene.hpp"
+#include <iostream>
 
 //=================================//
 //    Namespace: minamo::system    //
@@ -9,7 +10,7 @@ namespace minamo::system{
     //_ Constructor
     Scenes::Scenes (size_t ls_) noexcept
         : _scenes   {1}
-        , _log      {ls_}
+        , _log      (ls_)
         , _data     {nullptr}
     {
         std::fill(_log.begin(), _log.end(), 0);
@@ -20,7 +21,7 @@ namespace minamo::system{
 
 
     //_ Constant Function
-    auto Scenes::get_page_id (index_t id_) -> index_t
+    auto Scenes::get_scene_id (index_t id_) -> index_t
     {
         return _log.at(id_);
     }
@@ -62,7 +63,7 @@ namespace minamo::system{
     }
 
 
-    void Scenes::reset (index_t id_, uint8_t pos_, const Scene::Func& f_)
+    void Scenes::set (index_t id_, uint8_t pos_, const Scene::Func& f_)
     {
         Scene& scene=_scenes.at(id_);
         switch(pos_){
@@ -86,9 +87,27 @@ namespace minamo::system{
     }
 
 
+    void Scenes::set (index_t id_, const Scene::Func& df_, const Scene::Func& jf_, const Scene::Func& if_)
+    {
+        Scene& scene=_scenes.at(id_);
+ 
+        scene.draw       = df_;
+        scene.jump       = jf_;
+        scene.initialize = if_;
+       
+        return;
+    }
+
+
     auto Scenes::data (void) noexcept -> void*
     {
         return _data;
+    }
+
+
+    auto Scenes::data (index_t id_) -> void*
+    {
+        return _scenes.at(id_).data;
     }
 
 
