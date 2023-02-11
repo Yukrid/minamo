@@ -10,7 +10,7 @@ namespace minamo::system{
     //_ Constructor
     Scenes::Scenes (size_t ls_) noexcept
         : _scenes   {1}
-        , _log      (ls_)
+        , _log      (ls_ ? ls_ : 1)
         , _data     {nullptr}
     {
         std::fill(_log.begin(), _log.end(), 0);
