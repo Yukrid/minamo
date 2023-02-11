@@ -1,1 +1,0 @@
-/usr/bin/c++     CMakeFiles/scene_test.dir/scene_test.cpp.o  -o scene_test  -Wl,-rpath,/home/yuui/Git/minamo/build libminamo.so -lGL -lGLEW -lglfw -lfreetype 

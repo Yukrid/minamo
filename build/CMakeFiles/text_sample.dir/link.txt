@@ -1,1 +1,0 @@
-/usr/bin/c++     CMakeFiles/text_sample.dir/text_sample.cpp.o  -o text_sample  -Wl,-rpath,/home/yuui/Git/minamo/build libminamo.so -lGL -lGLEW -lglfw -lfreetype 
