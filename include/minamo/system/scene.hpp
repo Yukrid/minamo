@@ -23,7 +23,7 @@ namespace minamo::system{
         public:
         //(    minamo::system::Scenes::() Enumeration    )//
         enum : uint8_t{
-            DRAW, JUMP, INITIALIZE
+            DRAW, JUMP, LEAVE, INITIALIZE
         };
 
         private:
@@ -37,6 +37,7 @@ namespace minamo::system{
             bool  not_initialized = true;
             Func  draw            = nullptr;
             Func  jump            = nullptr;
+            Func  leave           = nullptr;
             Func  initialize      = nullptr;
             void* data            = nullptr;
         };
@@ -57,15 +58,15 @@ namespace minamo::system{
         Scenes (Scenes&&)      noexcept;
         
         //_ Constant Function
-        auto get_scene_id    (size_t =0)           -> index_t;
+        auto get_scene_id    (size_t =0)          -> index_t;
         auto get_log        (void)       noexcept -> const std::deque<index_t>&;
         auto is_initialized (index_t)             -> bool;
 
         //_ Variable Function
-        auto append (size_t)                                                              -> index_t;
-        auto append (const Scene::Func&, const Scene::Func&, const Scene::Func&)          -> index_t;
+        auto append (size_t)                                                                         -> index_t;
+        auto append (const Scene::Func&, const Scene::Func&, const Scene::Func&, const Scene::Func&) -> index_t;
         void set    (index_t, uint8_t, const Scene::Func&);
-        void set    (index_t, const Scene::Func&, const Scene::Func&, const Scene::Func&);
+        void set    (index_t, const Scene::Func&, const Scene::Func&, const Scene::Func&, const Scene::Func&);
 
         auto data  (void)    noexcept -> void*;
         auto data  (index_t)          -> void*;

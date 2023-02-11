@@ -1,0 +1,9 @@
+/home/yuui/Git/minamo/build/CMakeFiles/install/strip.dir
+/home/yuui/Git/minamo/build/CMakeFiles/install/local.dir
+/home/yuui/Git/minamo/build/CMakeFiles/install.dir
+/home/yuui/Git/minamo/build/CMakeFiles/list_install_components.dir
+/home/yuui/Git/minamo/build/CMakeFiles/rebuild_cache.dir
+/home/yuui/Git/minamo/build/CMakeFiles/scene_test.dir
+/home/yuui/Git/minamo/build/CMakeFiles/edit_cache.dir
+/home/yuui/Git/minamo/build/CMakeFiles/text_sample.dir
+/home/yuui/Git/minamo/build/CMakeFiles/minamo.dir

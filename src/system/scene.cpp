@@ -50,13 +50,14 @@ namespace minamo::system{
     }
 
 
-    auto Scenes::append (const Scene::Func& df_, const Scene::Func& jf_, const Scene::Func& if_) -> index_t
+    auto Scenes::append (const Scene::Func& df_, const Scene::Func& jf_, const Scene::Func& lf_, const Scene::Func& if_) -> index_t
     {
         _scenes.resize(_scenes.size()+1);
         
         Scene& scene=*(_scenes.end()-1);
         scene.draw       = df_;
         scene.jump       = jf_;
+        scene.leave      = lf_;
         scene.initialize = if_;
 
         return _scenes.size()-1;
@@ -75,7 +76,11 @@ namespace minamo::system{
             case JUMP:
                 scene.jump = f_;
                 return;
-            
+ 
+            case LEAVE:
+                scene.leave = f_;
+                return;
+           
             case INITIALIZE:
                 scene.initialize      = f_;
                 scene.not_initialized = true;
@@ -87,12 +92,13 @@ namespace minamo::system{
     }
 
 
-    void Scenes::set (index_t id_, const Scene::Func& df_, const Scene::Func& jf_, const Scene::Func& if_)
+    void Scenes::set (index_t id_, const Scene::Func& df_, const Scene::Func& jf_, const Scene::Func& lf_, const Scene::Func& if_)
     {
         Scene& scene=_scenes.at(id_);
  
         scene.draw       = df_;
         scene.jump       = jf_;
+        scene.leave      = lf_;
         scene.initialize = if_;
        
         return;
@@ -124,13 +130,17 @@ namespace minamo::system{
     {
         Scene& scene = _scenes.at(id_);
 
+        if(_scenes[_log[0]].leave){
+            
+            if(int32_t ret = _scenes[_log[0]].leave(*this)) return ret;    
+        }
+
         if(scene.not_initialized and scene.initialize){
 
             scene.not_initialized = false;
             if(int32_t ret = scene.initialize(*this)) return ret;
         }
-
-
+        
         if(scene.jump){
 
             if(int32_t ret = scene.jump(*this)) return ret;
