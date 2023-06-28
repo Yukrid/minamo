@@ -3,7 +3,7 @@
 
 #include <iostream>//
 
-#include "uint.hpp"
+///#include "uint.hpp"
 
 //=========================//
 //    Namespace: minamo    //
@@ -69,7 +69,7 @@ namespace minamo{
         glUseProgram(kernel.program_id);
         glEnableVertexAttribArray(location_id);
         glBindBuffer(GL_ARRAY_BUFFER, variable.buffer_id);
-        glVertexAttribIPouinter(location_id, D, GL_UINT, vertex_option.stride, vertex_option.pouinter);
+        glVertexAttribIPointer(location_id, D, GL_UNSIGNED_INT, vertex_option.stride, vertex_option.pointer);
 
 #ifdef MINAMO_CALLED_GL_FUNC_INFO
         std::cout<<"[UintAttrib::prefix]  glUseProgram : "<<kernel.program_id<<std::endl;
