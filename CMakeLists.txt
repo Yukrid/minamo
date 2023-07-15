@@ -13,7 +13,8 @@ add_library(minamo SHARED src/count_log.cpp
 
 target_compile_features(minamo PUBLIC cxx_std_17)
 target_compile_options(minamo PUBLIC -Wall)
-target_include_directories(minamo PUBLIC include include/freetype2)
+target_include_directories(minamo PUBLIC includ)
+include_directories(freetype2)
 target_link_libraries(minamo GL GLEW glfw freetype)
 
 add_executable(text_sample text_sample.cpp)
