@@ -5,7 +5,7 @@
 #include <vector>
 #include <fstream>
 
-#include <ft2build.h>
+#include <freetype2/ft2build.h>
 
 #include "../forward.hpp"
 
